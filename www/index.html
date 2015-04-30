@@ -11,7 +11,7 @@
             $scope.add = function() {
                 $http({
                     method: 'GET',
-                    url: 'http://localhost:8080/controller/user/addUser?id=' + $scope.input.id + '&username=' + $scope.input.username
+                    url: 'http://127.0.0.1:8080/controller/user/addUser?username=' + $scope.input.username
                 }).success(
                         function (data, status, headers, config) {
                             $scope.input = {};
@@ -24,7 +24,7 @@
 
             $http({
                 method:'GET',
-                url:'http://localhost:8080/controller/user/getList'
+                url:'http://127.0.0.1:8080/controller/user/getList'
             }).success(
                     function (data, status, headers, config) {
                         $scope.users = data;
@@ -39,7 +39,6 @@
 <div ng-app="myApp">
     <div ng-controller="UserCtrl">
         <p>
-            id:<input type="text" ng-model="input.id" />
             name:<input type="text" ng-model="input.username" />
             <button ng-click="add()">add</button>
         </p>
