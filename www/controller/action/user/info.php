@@ -29,7 +29,7 @@ class Info extends Action\Base {
     }
 
     public function addUser($f3) {
-        $username = $f3->get('GET.username');
+        $username = $f3->get('POST.username');
 
         $db = $this->db;
         $user = new DB\SQL\Mapper($db,'user');
@@ -37,6 +37,5 @@ class Info extends Action\Base {
         $user->save();
 
         $this->getList();
-        #$f3->reroute('/user/getList');
     }
 }
