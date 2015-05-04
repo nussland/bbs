@@ -6,26 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SimB</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        function test() {
+            $("#panWrite").show();
+            $("#panListHead").hide();
+
+            return true;
+        }
+    </script>
 </head>
 <body>
 
 <div class="container">
     <h2>SimB</h2>
     <h4>Search</h4>
-    <div id="write">
+    <div id="panWrite" style="display: none">
         <form>
             <div class="form-group">
                 <label for="writer">작성자</label>
                 <input type="text" class="form-control" id="writer" placeholder="작성자">
             </div>
             <div class="form-group">
-                <label for="text">내용</label>
-                <input type="text" class="form-control" id="text" placeholder="첫번째 줄이 제목이 됩니다.">
+                <label for="memo">내용</label>
+                <input type="text" class="form-control" id="memo" placeholder="첫번째 줄이 제목이 됩니다.">
             </div>
             <button type="submit" class="btn btn-default">제출</button>
         </form>
     </div>
-    <div>
+    <div id="panListHead" style="display: block">
         <ul class="list-inline">
             <li>#</li>
             <li>Subject</li>
@@ -50,7 +60,7 @@
             <li>10</li>
         </ul>
     </div>
-    Write
+    <button onclick="return test();">Write</button>
 </div>
 
 </body>
