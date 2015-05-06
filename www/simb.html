@@ -1,66 +1,122 @@
 <!DOCTYPE html>
 <html>
 <head lang="ko">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SimB</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-        function test() {
-            $("#panWrite").show();
-            $("#panListHead").hide();
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>SimB</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/common.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		function Write() {
+			$("#panWrite").show();
+			$("#panListHead").hide();
 
-            return true;
-        }
-    </script>
+			return true;
+		}
+
+		function cancel() {
+			$("#panWrite").hide();
+			$("#panListHead").show();
+
+			return true;
+		}
+
+		function view(note) {
+			$("#"+note).show();
+		}
+	</script>
 </head>
 <body>
 
 <div class="container">
-    <h2>SimB</h2>
-    <h4>Search</h4>
-    <div id="panWrite" style="display: none">
-        <form>
-            <div class="form-group">
-                <label for="writer">작성자</label>
-                <input type="text" class="form-control" id="writer" placeholder="작성자">
-            </div>
-            <div class="form-group">
-                <label for="memo">내용</label>
-                <input type="text" class="form-control" id="memo" placeholder="첫번째 줄이 제목이 됩니다.">
-            </div>
-            <button type="submit" class="btn btn-default">제출</button>
-        </form>
-    </div>
-    <div id="panListHead" style="display: block">
-        <ul class="list-inline">
-            <li>#</li>
-            <li>Subject</li>
-            <li>Writer</li>
-            <li>Date</li>
-            <li>Hit</li>
-        </ul>
-    </div>
-    <div>
-        <ul class="list-inline">
-            <li>2</li>
-            <li>제목</li>
-            <li>작성자</li>
-            <li>2015.01.01</li>
-            <li>10</li>
-        </ul>
-        <ul class="list-inline">
-            <li>1</li>
-            <li>제목</li>
-            <li>작성자</li>
-            <li>2015.01.01</li>
-            <li>10</li>
-        </ul>
-    </div>
-    <button onclick="return test();">Write</button>
+	<h2>SimB</h2>
+	<div>
+		<ul class="nav nav-pills nav-justified">
+			<li class="active" style="width:120px"><a href="#">List</a></li>
+			<li style="width:120px"><a href="#" onclick="return Write();">Write</a></li>
+			<li style="width:120px"><a href="#">Search</a></li>
+		</ul>
+	</div>
+	<div id="panWrite" style="display: none">
+		<form>
+			<input type="text" class="form-control" id="writer" placeholder="제목">
+			<input type="text" class="form-control" id="note" placeholder="내용">
+			<button class="btn btn-default" type="submit">제출</button>
+			<button class="btn btn-default" onclick="return cancel();">취소</button>
+		</form>
+	</div>
+	<div id="panSearch" style="display: none">
+		<div class="input-group">
+			<span class="input-group-addon">
+				<input type="radio" checked> Subject&nbsp;
+				<input type="radio"> Subject+Note&nbsp;
+				<input type="radio"> Writer&nbsp;
+			</span>
+			<input type="text" class="form-control">
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="button">Search</button>
+			</span>
+		</div>
+	</div>
+	<div class="center-align">
+		<table class="table table-hover">
+			<thead>
+				<tr id="panListHead">
+					<th class="list-num">#</th>
+					<th class="list-subject">Subject</th>
+					<th class="list-writer">Writer</th>
+					<th class="list-date">Date</th>
+					<th class="list-hit">Hit</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr onclick="return view('note2');">
+					<td class="list-num">2</td>
+					<td class="list-subject left-align">제목</td>
+					<td class="list-writer">작성자</td>
+					<td class="list-date">2015.01.01</td>
+					<td class="list-hit">10</td>
+				</tr>
+				<tr id="note2" style="display: none">
+					<td class="active" colspan="5">note2</td>
+				</tr>
+				<tr onclick="return view('note1');">
+					<td class="list-num">1</td>
+					<td class="list-subject left-align">제목</td>
+					<td class="list-writer">작성자</td>
+					<td class="list-date">2015.01.01</td>
+					<td class="list-hit">10</td>
+				</tr>
+				<tr id="note1" style="display: none">
+					<td class="active" colspan="5">note1</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="center-align">
+		<nav>
+			<ul class="pagination">
+				<li>
+					<a href="#" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+				<li><a href="#">1</a></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li><a href="#">4</a></li>
+				<li><a href="#">5</a></li>
+				<li>
+					<a href="#" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
 </div>
 
 </body>

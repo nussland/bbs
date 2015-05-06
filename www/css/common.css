@@ -1,0 +1,35 @@
+.list-inline li {
+	text-align: center;
+}
+
+.list-num {
+	width:10%;
+}
+
+.list-subject {
+	width:45%;
+}
+
+.list-writer {
+	width:15%;
+}
+
+.list-date {
+	width:15%;
+}
+
+.list-hit {
+	width:10%;
+}
+
+.table th, td {
+	text-align: center;
+}
+
+.left-align {
+	text-align: left;
+}
+
+.center-align {
+	text-align: center;
+}
