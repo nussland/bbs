@@ -11,7 +11,11 @@
 }
 
 .list-title {
-	width:45%;
+	width:40%;
+}
+
+.list-comment {
+	width:5%;
 }
 
 .list-name {
@@ -36,4 +40,8 @@
 
 .center-align {
 	text-align: center;
+}
+
+.right-align {
+	text-align: right;
 }
