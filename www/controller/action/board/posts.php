@@ -21,4 +21,5 @@ class Posts extends Action\Base {
 	public function modPost() {}
 
 	public function delPost() {}
+
 }
