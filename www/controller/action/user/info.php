@@ -12,20 +12,17 @@ use DB;
 
 class Info extends Action\Base {
     public function getList() {
+        $value = array();
+
         $db = $this->db;
         $user = new DB\SQL\Mapper($db,'user');
-        $list = $user->select('*');
+        $user->load();
 
-        $val = array();
-        $i = 0;
+        do {
+            array_push($value, $user->cast());
+        } while($user->skip());
 
-        foreach ($list as $obj) {
-            $val[$i]['id'] = $obj->id;
-            $val[$i]['username'] = $obj->username;
-            $i++;
-        }
-
-        echo json_encode($val);
+        echo json_encode($value);
     }
 
     public function addUser($f3) {
