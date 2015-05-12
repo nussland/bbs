@@ -11,7 +11,7 @@
             $scope.add = function() {
                 $http({
                     method: 'POST',
-                    url: 'http://localhost:8080/controller/user/addUser',
+                    url: 'http://localhost:8080/api/user/addUser',
                     data: 'username='+ $scope.input.username,
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function (data, status, headers, config) {
@@ -22,7 +22,7 @@
 
             $http({
                 method:'GET',
-                url:'http://localhost:8080/controller/user/getList'
+                url:'http://localhost:8080/api/user/getList'
             }).success(function (data, status, headers, config) {
                 $scope.users = data;
             }).error(function (data, status, headers, cnofig) {});

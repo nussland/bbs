@@ -4,6 +4,8 @@
  *
  * Created on 15. 4. 30
  * @author: hskim
+ *
+CREATE TABLE user (id INTEGER PRIMARY KEY, username VARCHAR(50));
  */
 namespace Action\User;
 

@@ -1,0 +1,71 @@
+<div class="row" style="padding-bottom: 15px;">
+	<div class="col-xs-3">
+		<div class="btn-group btn-group-justified" role="group">
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-primary">List</button>
+			</div>
+			<div class="btn-group" role="group">
+				<button type="button" class="btn btn-default" onclick="return Write();">Write</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-4"></div>
+	<div class="col-xs-5">
+		<div class="input-group">
+				<span class="input-group-addon">
+					<span class="glyphicon glyphicon-search" id="basic-addon2" aria-hidden="true"></span>
+				</span>
+			<input type="text" class="form-control" placeholder="Search" aria-describedby="basic-addon2">
+		</div>
+	</div>
+</div>
+<div class="center-align">
+	<table class="table table-hover">
+		<thead>
+		<tr id="panListHead">
+			<th class="list-num">#</th>
+			<th class="list-title">Title</th>
+			<th class="list-comment"></th>
+			<th class="list-name">Name</th>
+			<th class="list-date">Date</th>
+			<th class="list-hit">Hit</th>
+		</tr>
+		</thead>
+		<tbody>
+		<!-- Posts List Start -->
+		<tr onclick="return view('view');" ng-repeat="post in posts">
+			<td class="list-num">{{post.idx}}</td>
+			<td class="list-title left-align">{{post.title}}</td>
+			<td class="list-comment">
+				<span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+				{{post.commentCnt}}
+			</td>
+			<td class="list-name">{{post.name}}</td>
+			<td class="list-date">{{post.regDate}}</td>
+			<td class="list-hit">{{post.hit}}</td>
+		</tr>
+		<!-- Posts List End -->
+		</tbody>
+	</table>
+</div>
+<div class="center-align">
+	<nav>
+		<ul class="pagination">
+			<li>
+				<a href="#" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+			<li><a href="#">1</a></li>
+			<li><a href="#">2</a></li>
+			<li><a href="#">3</a></li>
+			<li><a href="#">4</a></li>
+			<li><a href="#">5</a></li>
+			<li>
+				<a href="#" aria-label="Next">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+</div>
