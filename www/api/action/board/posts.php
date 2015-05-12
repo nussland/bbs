@@ -18,8 +18,8 @@ modDate int unsigned not null default 0,
 hit smallint unsigned not null default 0,
 commentCnt smallint unsigned not null default 0,
 fileCnt TINYINT unsigned not null default 0,
-flagDelete varchar(1) not null default 'N')
- * ;
+flagDelete varchar(1) not null default 'N');
+ *
 CREATE TABLE board (
 idx INTEGER primary key,
 userId TEXT,
