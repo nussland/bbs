@@ -78,7 +78,20 @@ class Posts extends Action\Base {
 
 	public function getPost() {}
 
-	public function addPost() {}
+	public function addPost($f3) {
+
+		$db = $this->db;
+		$board = new DB\SQL\Mapper($db, 'board');
+
+		$board->name =$f3->get('POST.name');
+		$board->passwd = $f3->get('POST.passwd');
+		$board->title = $f3->get('POST.title');
+		$board->regDate = time();
+
+		$board->save();
+
+		//echo $f3->get('POST.name');
+	}
 
 	public function modPost() {}
 

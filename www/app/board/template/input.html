@@ -1,0 +1,46 @@
+<div class="panel panel-default" id="panWrite">
+	<div class="panel-heading">
+		<input type="text" class="form-control" ng-model="input.title" placeholder="Title">
+	</div>
+	<div class="panel-body form-inline">
+		<div class="form-group">
+			<input type="text" class="form-control" ng-model="input.name" placeholder="Name">
+		</div>
+		<div class="form-group">
+			<input type="password" class="form-control" ng-model="input.passwd" placeholder="Password">
+		</div>
+		<div class="form-group">
+			<input type="email" class="form-control" id="exampleInputEmail2" placeholder="Email">
+		</div>
+		<div class="checkbox">
+			<label>
+				<input type="checkbox"> Remember me
+			</label>
+		</div>
+	</div>
+	<div class="panel-body">
+		<div class="text-editor"></div>
+		<script type="text/javascript" charset="utf-8">
+			$('.text-editor').notebook();
+		</script>
+		<button type="button" class="btn btn-default btn-xs">
+			<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+		</button>
+		<button type="button" class="btn btn-default btn-xs">
+			<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+		</button>
+		<button type="button" class="btn btn-default btn-xs">
+			<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+		</button>
+		<button type="button" class="btn btn-default btn-xs">
+			<span class="glyphicon glyphicon-indent-left" aria-hidden="true"></span>
+		</button>
+		<button type="button" class="btn btn-default btn-xs">
+			<span class="glyphicon glyphicon-indent-right" aria-hidden="true"></span>
+		</button>
+	</div>
+	<div class="panel-footer">
+		<button class="btn btn-default" type="button" ng-click="add()">제출</button>
+		<a href="#/" class="btn btn-default">취소</a>
+	</div>
+</div>
