@@ -13,7 +13,9 @@ $f3->config('AUTOLOAD', 'action/');
 $f3->route('GET /user/getList', 'Action\User\Info->getList');
 $f3->route('POST /user/addUser', 'Action\User\Info->addUser');
 
-$f3->route('GET /board/getList', 'Action\Board\Posts->getList');
+$f3->route('GET /board/getList/@page', 'Action\Board\Posts->getList');
+$f3->route('GET /board/getPage/@page', 'Action\Board\Posts->getPage');
+$f3->route('GET /board/viewPost/@idx', 'Action\Board\Posts->viewPost');
 $f3->route('POST /board/addPost', 'Action\Board\Posts->addPost');
 
 $f3->run();

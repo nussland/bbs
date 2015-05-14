@@ -19,9 +19,12 @@
 		</div>
 	</div>
 	<div class="panel-body">
-		<div class="text-editor"></div>
+		<div class="note-editor"></div>
+		<input type="hidden" id="input-note" ng-model="input.note">
 		<script type="text/javascript" charset="utf-8">
-			$('.text-editor').notebook();
+			$('.note-editor').notebook().on('contentChange', function(e) {
+				$('#input-note').val(e.originalEvent.detail.content);
+			});
 		</script>
 		<button type="button" class="btn btn-default btn-xs">
 			<span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>

@@ -44,8 +44,11 @@ namespace Action\Board;
 use Action;
 use DB;
 
+define("POSTLIMIT", 10);
+define("PAGELIMIT", 4);
+
 class Posts extends Action\Base {
-	public function getList() {
+	public function getList($f3, $params) {
 		$value = array();
 
 		$db = $this->db;
@@ -55,9 +58,9 @@ class Posts extends Action\Base {
 			"idx, userId, name, title, regDate, hit, commentCnt",
 			"flagDelete = 'N'",
 			array(
-				'order' => 'idx ASC',
-				'limit' => 10,
-				'offset' => 0
+				'order' => 'idx DESC',
+				'limit' => POSTLIMIT,
+				'offset' => ($params['page']-1) * POSTLIMIT
 			)
 		);
 
@@ -67,7 +70,7 @@ class Posts extends Action\Base {
 				'userId' => $obj->userId,
 				'name' => $obj->name,
 				'title' => $obj->title,
-				'regDate' => $obj->regDate,
+				'regDate' => date('Y-m-d', $obj->regDate),
 				'hit' => $obj->hit,
 				'commentCnt' => $obj->commentCnt
 			));
@@ -76,21 +79,65 @@ class Posts extends Action\Base {
 		echo json_encode($value);
 	}
 
-	public function getPost() {}
+	public function getPage($f3, $params) {
+		$value = array();
+
+		$db = $this->db;
+		$board = new DB\SQL\Mapper($db, 'board');
+
+		$value['totalCnt'] = $board->count();
+		$value['totalPage'] = round($board->count()/10) + 1;
+
+		$value['prev'] = ($params['page'] - 1 > 0) ? $params['page']-1 : 1;
+		$value['next'] = ($params['page'] + 1 < $value['totalPage']) ?
+			$params['page']+1 : $value['totalPage'];
+
+		$start = ($params['page'] - PAGELIMIT > 0) ? $params['page'] - PAGELIMIT : 1;
+		$end = ($params['page'] + PAGELIMIT < $value['totalPage']) ?
+			$params['page'] + PAGELIMIT : $value['totalPage'];
+
+		for($i = $start; $i <= $end; $i++) {
+			$value['pages'][] = $i;
+		}
+
+		echo json_encode($value);
+	}
+
+	public function viewPost($f3, $params) {
+		$value = array();
+
+		$db = $this->db;
+		$board = new DB\SQL\Mapper($db, 'board');
+
+		$board->load(array('idx = ?', $params['idx']));
+		$board->hit++;
+		$board->save();
+
+		$value['idx'] = $board->idx;
+		$value['userId'] = $board->userId;
+		$value['name'] = $board->name;
+		$value['email'] = $board->email;
+		$value['title'] = $board->title;
+		$value['note'] = $board->note;
+		$value['regDate'] = date('Y-m-d H:i:s', $board->regDate);
+		$value['modDate'] = $board->modDate;
+		$value['commentCnt'] = $board->commentCnt;
+		$value['fileCnt'] = $board->fileCnt;
+
+		echo json_encode($value);
+	}
 
 	public function addPost($f3) {
-
 		$db = $this->db;
 		$board = new DB\SQL\Mapper($db, 'board');
 
 		$board->name =$f3->get('POST.name');
 		$board->passwd = $f3->get('POST.passwd');
 		$board->title = $f3->get('POST.title');
+		$board->note = $f3->get('POST.note');
 		$board->regDate = time();
 
 		$board->save();
-
-		//echo $f3->get('POST.name');
 	}
 
 	public function modPost() {}

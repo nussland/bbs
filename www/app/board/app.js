@@ -8,15 +8,19 @@ var app = angular.module('boardApp', [
 
 app.config(['$routeProvider', function($routeProvider) {
 	$routeProvider.
-		when('/', {
+		when('/:page', {
 			controller: 'PostsListCtrl',
 			templateUrl: 'app/board/template/list.html'
 		}).
-		when('/add', {
+		when('/add/:page', {
 			controller: 'PostAddCtrl',
 			templateUrl: 'app/board/template/input.html'
 		}).
+		when('/view/:page/post/:idx', {
+			controller: 'PostViewCtrl',
+			templateUrl: 'app/board/template/list.html'
+		}).
 		otherwise({
-			redirectTo: '/'
+			redirectTo: '/1'
 		});
 }]);
