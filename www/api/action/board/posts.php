@@ -48,19 +48,26 @@ define("POSTLIMIT", 10);
 define("PAGELIMIT", 4);
 
 class Posts extends Action\Base {
-	public function getList($f3, $params) {
+	public function getList($f3) {
 		$value = array();
+		$page = $f3->get('GET.page');
+		$search = $f3->get('GET.search');
+		$where = array("flagDelete = ?", "N");
+
+		if ($search != '') {
+			$where = array("flagDelete = ? AND (title LIKE ? OR name LIKE ?)", "N", $search."%", $search."%");
+		}
 
 		$db = $this->db;
 		$board = new DB\SQL\Mapper($db, 'board');
 
 		$list = $board->select(
 			"idx, userId, name, title, regDate, hit, commentCnt",
-			"flagDelete = 'N'",
+			$where,
 			array(
 				'order' => 'idx DESC',
 				'limit' => POSTLIMIT,
-				'offset' => ($params['page']-1) * POSTLIMIT
+				'offset' => ($page-1) * POSTLIMIT
 			)
 		);
 
@@ -81,20 +88,25 @@ class Posts extends Action\Base {
 
 	public function getPage($f3, $params) {
 		$value = array();
+		$page = $f3->get('GET.page');
+		$search = $f3->get('GET.search');
+		$where = array("flagDelete = ?", "N");
+
+		if ($search != '') {
+			$where = array("flagDelete = ? AND (title LIKE ? OR name LIKE ?)", "N", $search."%", $search."%");
+		}
 
 		$db = $this->db;
 		$board = new DB\SQL\Mapper($db, 'board');
 
-		$value['totalCnt'] = $board->count();
-		$value['totalPage'] = round($board->count()/10) + 1;
+		$value['totalCnt'] = $board->count($where);
+		$value['totalPage'] = floor($value['totalCnt']/10) + 1;
 
-		$value['prev'] = ($params['page'] - 1 > 0) ? $params['page']-1 : 1;
-		$value['next'] = ($params['page'] + 1 < $value['totalPage']) ?
-			$params['page']+1 : $value['totalPage'];
+		$value['prev'] = ($page - 1 > 0) ? $page-1 : 1;
+		$value['next'] = ($page + 1 < $value['totalPage']) ? $page + 1 : $value['totalPage'];
 
-		$start = ($params['page'] - PAGELIMIT > 0) ? $params['page'] - PAGELIMIT : 1;
-		$end = ($params['page'] + PAGELIMIT < $value['totalPage']) ?
-			$params['page'] + PAGELIMIT : $value['totalPage'];
+		$start = ($page - PAGELIMIT > 0) ? $page - PAGELIMIT : 1;
+		$end = ($page + PAGELIMIT < $value['totalPage']) ? $page + PAGELIMIT : $value['totalPage'];
 
 		for($i = $start; $i <= $end; $i++) {
 			$value['pages'][] = $i;
@@ -128,13 +140,15 @@ class Posts extends Action\Base {
 	}
 
 	public function addPost($f3) {
+		$note = str_replace(' contenteditable="true"', '', $f3->get('POST.note'));
+
 		$db = $this->db;
 		$board = new DB\SQL\Mapper($db, 'board');
 
-		$board->name =$f3->get('POST.name');
+		$board->name = $f3->get('POST.name');
 		$board->passwd = $f3->get('POST.passwd');
 		$board->title = $f3->get('POST.title');
-		$board->note = $f3->get('POST.note');
+		$board->note = $note;
 		$board->regDate = time();
 
 		$board->save();

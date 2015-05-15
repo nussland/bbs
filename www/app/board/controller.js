@@ -3,31 +3,60 @@
  */
 var BoardController = angular.module('BoardController', []);
 
-BoardController.controller('PostsListCtrl', ['$scope', '$http', '$routeParams',
-	function($scope, $http, $routeParams) {
+BoardController.controller('PostsListCtrl', ['$scope', '$http', '$routeParams', '$location',
+	function($scope, $http, $routeParams, $location) {
 		var page = $routeParams.page;
+		var searchText = $routeParams.searchText;
+		var idx = $routeParams.idx;
+		var param = '?page='+ page;
+
+		if (searchText && searchText != '') {
+			param += '&search=' + searchText;
+			$scope.searchText = searchText;
+			$scope.viewSearchText = '/search/' + searchText;
+
+		} else {
+			$scope.searchText = 'Search';
+			$scope.viewSearchText = '';
+		}
 
 		$scope.currentPage = page;
 		$scope.orderProp = '-idx';
 
+		if (idx && idx != '') {
+			$http({
+				method:'GET',
+				url:'api/board/viewPost/' + idx
+			}).success(function(data) {
+				$scope.view = data;
+				$('#viewHtml').html(data.note);
+			});
+		}
+
 		$http({
 			method:'GET',
-			url:'api/board/getList/'+ page
+			url:'api/board/getList' + param
 		}).success(function(data) {
 			$scope.posts = data;
 		});
 
 		$http({
 			method:'GET',
-			url:'api/board/getPage/'+ page
+			url:'api/board/getPage' + param
 		}).success(function(data) {
 			$scope.pageInfo = data;
 		});
+
+		$scope.findPost = function(KeyboardEvent) {
+			if (KeyboardEvent['keyCode'] == 13) {
+				$location.path('/1/search/'+ $scope.search.text);
+			}
+		};
 	}
 ]);
 
 BoardController.controller('PostAddCtrl', ['$scope', '$http', '$location',
-	function($scope, $http, $routeParams, $location) {
+	function($scope, $http, $location) {
 		$scope.add = function() {
 			$http({
 				method: 'POST',
@@ -45,26 +74,20 @@ BoardController.controller('PostAddCtrl', ['$scope', '$http', '$location',
 	}
 ]);
 
-BoardController.controller('PostViewCtrl', ['$scope', '$http', '$routeParams',
-	function($scope, $http, $routeParams) {
+BoardController.controller('PostModCtrl', ['$scope', '$http', '$routeParams', '$location',
+	function($scope, $http, $routeParams, $location) {
 		var page = $routeParams.page;
+		var searchText = $routeParams.searchText;
 		var idx = $routeParams.idx;
-
-		$scope.currentPage = page;
-		$scope.orderProp = '-idx';
+		var param = '?page='+ page;
 
 		$http({
 			method:'GET',
 			url:'api/board/viewPost/' + idx
 		}).success(function(data) {
-			$scope.view = data;
+			$scope.input = data;
 		});
 
-		$http({
-			method:'GET',
-			url:'api/board/getList/'+ page
-		}).success(function(data) {
-			$scope.posts = data;
-		});
+		$('#inputName').attr('disabled', 'disabled');
 	}
 ]);
