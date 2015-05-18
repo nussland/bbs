@@ -35,19 +35,16 @@ commentCnt INTEGER default 0,
 fileCnt INTEGER default 0,
 flagDelete TEXT default 'N');
  *
-CREATE INDEX idx01 ON board(userId);
-CREATE INDEX idx02 ON board(name);
-CREATE INDEX idx03 ON board(title);
+CREATE INDEX boardIdx01 ON board(userId);
+CREATE INDEX boardIdx02 ON board(name);
+CREATE INDEX boardIdx03 ON board(title);
  */
 namespace Action\Board;
 
 use Action;
 use DB;
 
-define("POSTLIMIT", 10);
-define("PAGELIMIT", 4);
-
-class Posts extends Action\Base {
+class Post extends Action\Base {
 	public function getList($f3) {
 		$value = array();
 		$page = $f3->get('GET.page');
@@ -86,7 +83,7 @@ class Posts extends Action\Base {
 		echo json_encode($value);
 	}
 
-	public function getPage($f3, $params) {
+	public function getPage($f3) {
 		$value = array();
 		$page = $f3->get('GET.page');
 		$search = $f3->get('GET.search');
@@ -115,7 +112,7 @@ class Posts extends Action\Base {
 		echo json_encode($value);
 	}
 
-	public function viewPost($f3, $params) {
+	public function view($f3, $params) {
 		$value = array();
 
 		$db = $this->db;
@@ -139,7 +136,7 @@ class Posts extends Action\Base {
 		echo json_encode($value);
 	}
 
-	public function addPost($f3) {
+	public function add($f3) {
 		$note = str_replace(' contenteditable="true"', '', $f3->get('POST.note'));
 
 		$db = $this->db;
@@ -154,8 +151,40 @@ class Posts extends Action\Base {
 		$board->save();
 	}
 
-	public function modPost() {}
+	public function modify($f3) {
+		$note = str_replace(' contenteditable="true"', '', $f3->get('POST.note'));
 
-	public function delPost() {}
+		$db = $this->db;
+		$board = new DB\SQL\Mapper($db, 'board');
 
+		$board->load(array('idx = ? AND passwd = ?', $f3->get('POST.idx'), $f3->get('POST.passwd')));
+
+		if ($board->dry()) {
+			echo 1;
+		} else {
+			$board->title = $f3->get('POST.title');
+			$board->note = $note;
+			$board->modDate = time();
+
+			$board->save();
+			echo 0;
+		}
+	}
+
+	public function delete($f3) {
+		$db = $this->db;
+		$board = new DB\SQL\Mapper($db, 'board');
+
+		$board->load(array('idx = ? AND passwd = ?', $f3->get('POST.idx'), $f3->get('POST.passwd')));
+
+		if ($board->dry()) {
+			echo 1;
+		} else {
+			$board->flagDelete = "Y";
+			$board->modDate = time();
+
+			$board->save();
+			echo 0;
+		}
+	}
 }

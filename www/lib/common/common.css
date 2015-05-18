@@ -53,3 +53,8 @@
 .show {
 	display: block;
 }
+
+label.error, label.error {
+	color: red;
+	font-style: italic
+}

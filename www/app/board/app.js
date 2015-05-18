@@ -32,6 +32,10 @@ app.config(['$routeProvider', function($routeProvider) {
 			controller: 'PostModCtrl',
 			templateUrl: 'app/board/template/input.html'
 		}).
+		when('/del/:page/post/:idx', {
+			controller: 'PostDelCtrl',
+			templateUrl: 'app/board/template/passwd.html'
+		}).
 		otherwise({
 			redirectTo: '/1'
 		});

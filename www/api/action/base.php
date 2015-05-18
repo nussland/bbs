@@ -9,6 +9,9 @@ namespace Action;
 
 use DB;
 
+define("POSTLIMIT", 10);
+define("PAGELIMIT", 4);
+
 class Base {
     protected $db;
 

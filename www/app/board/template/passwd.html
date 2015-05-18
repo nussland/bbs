@@ -1,0 +1,17 @@
+<form id="myForm">
+<div class="panel panel-default" style="width:500px;margin: 0 auto">
+	<div class="panel-body form-inline">
+		<label for="passwd">Password: </label>
+		<div class="form-group">
+			<input type="password" id="passwd" class="form-control" ng-model="input.passwd" placeholder="Password" required>
+		</div>
+	</div>
+	<div class="panel-footer">
+		<button class="btn btn-default" type="submit" ng-click="action()">제출</button>
+		<button class="btn btn-default" onclick="history.go(-1);">취소</button>
+	</div>
+</div>
+</form>
+<script>
+	$("#myForm").validate();
+</script>
