@@ -97,7 +97,7 @@ class Post extends Action\Base {
 		$board = new DB\SQL\Mapper($db, 'board');
 
 		$value['totalCnt'] = $board->count($where);
-		$value['totalPage'] = floor($value['totalCnt']/10) + 1;
+		$value['totalPage'] = floor($value['totalCnt'] / POSTLIMIT) + 1;
 
 		$value['prev'] = ($page - 1 > 0) ? $page-1 : 1;
 		$value['next'] = ($page + 1 < $value['totalPage']) ? $page + 1 : $value['totalPage'];

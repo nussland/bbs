@@ -13,7 +13,7 @@ name varchar(20) not null default '',
 passwd varchar(20) not null default '',
 email varchar(50) not null default '',
 note text not null,
-regdate int unsigned not null default 0,
+regDate int unsigned not null default 0,
 modDate int unsigned not null default 0,
 flagDelete varchar(1) not null default 'N');
  *
@@ -25,7 +25,7 @@ name TEXT,
 passwd TEXT,
 email TEXT,
 note TEXT,
-regdate INTEGER default 0,
+regDate INTEGER default 0,
 modDate INTEGER default 0,
 flagDelete TEXT default 'N');
  *
@@ -53,8 +53,8 @@ class Comment extends Action\Base {
 			$where,
 			array(
 				'order' => 'idx DESC',
-				'limit' => POSTLIMIT,
-				'offset' => ($more-1) * POSTLIMIT
+				'limit' => $more * COMMENTLIMIT,
+				'offset' => 0
 			)
 		);
 
@@ -80,54 +80,92 @@ class Comment extends Action\Base {
 		$db = $this->db;
 		$board = new DB\SQL\Mapper($db, 'comment');
 
-		$value['totalCnt'] = $board->count($where);
-		$value['totalPage'] = floor($value['totalCnt']/10) + 1;
-		$value['more'] = ($page + 1 < $value['totalPage']) ? $page + 1 : 0;
+		$totalCnt = $board->count($where);
+		$totalPage = floor($totalCnt / COMMENTLIMIT) + 1;
+		$value['more'] = ($page + 1 <= $totalPage) ? $page + 1 : 0;
+		$value['moreCount'] = ($value['more'] > 0) ? $totalCnt - ($page * COMMENTLIMIT) : 0;
+
+		echo json_encode($value);
+	}
+
+	public function view($f3, $params) {
+		$value = array();
+
+		$db = $this->db;
+		$board = new DB\SQL\Mapper($db, 'comment');
+
+		$board->load(array('idx = ?', $params['idx']));
+
+		$value['idx'] = $board->idx;
+		$value['userId'] = $board->userId;
+		$value['name'] = $board->name;
+		$value['email'] = $board->email;
+		$value['note'] = $board->note;
+		$value['regDate'] = date('Y-m-d H:i:s', $board->regDate);
+		$value['modDate'] = $board->modDate;
 
 		echo json_encode($value);
 	}
 
 	public function add($f3) {
 		$db = $this->db;
-		$board = new DB\SQL\Mapper($db, 'comment');
+		$comment = new DB\SQL\Mapper($db, 'comment');
 
-		$board->boardIdx = $f3->get('POST.boardIdx');
-		$board->name = $f3->get('POST.name');
-		$board->passwd = $f3->get('POST.passwd');
-		$board->note = $f3->get('POST.note');
-		$board->regDate = time();
+		$comment->boardIdx = $f3->get('POST.boardIdx');
+		$comment->name = $f3->get('POST.name');
+		$comment->passwd = $f3->get('POST.passwd');
+		$comment->note = $f3->get('POST.note');
+		$comment->regDate = time();
+
+		$comment->save();
+
+		$board = new DB\SQL\Mapper($db, 'board');
+
+		$board->load(array('idx = ?',  $f3->get('POST.boardIdx')));
+		$board->commentCnt++;
 
 		$board->save();
+
+		$params['boardIdx'] = $f3->get('POST.boardIdx');
+		$params['more'] = 1;
+		$this->getList($f3, $params);
 	}
 
 	public function modify($f3) {
 		$db = $this->db;
-		$board = new DB\SQL\Mapper($db, 'comment');
+		$comment = new DB\SQL\Mapper($db, 'comment');
 
-		$board->load(array('idx = ? AND passwd = ?', $f3->get('POST.idx'), $f3->get('POST.passwd')));
+		$comment->load(array('idx = ? AND passwd = ?', $f3->get('POST.idx'), $f3->get('POST.passwd')));
 
-		if ($board->dry()) {
+		if ($comment->dry()) {
 			echo 1;
 		} else {
-			$board->note = $f3->get('POST.note');
-			$board->modDate = time();
+			$comment->note = $f3->get('POST.note');
+			$comment->modDate = time();
 
-			$board->save();
+			$comment->save();
 			echo 0;
 		}
 	}
 
 	public function delete($f3) {
 		$db = $this->db;
-		$board = new DB\SQL\Mapper($db, 'comment');
+		$comment = new DB\SQL\Mapper($db, 'comment');
 
-		$board->load(array('idx = ? AND passwd = ?', $f3->get('POST.idx'), $f3->get('POST.passwd')));
+		$comment->load(array('idx = ? AND passwd = ?', $f3->get('POST.idx'), $f3->get('POST.passwd')));
 
-		if ($board->dry()) {
+		if ($comment->dry()) {
 			echo 1;
 		} else {
-			$board->flagDelete = "Y";
-			$board->modDate = time();
+			$comment->flagDelete = "Y";
+			$comment->modDate = time();
+
+			$comment->save();
+
+			$board = new DB\SQL\Mapper($db, 'board');
+
+			$board->load(array('idx = ?',  $f3->get('POST.boardIdx')));
+			$board->commentCnt--;
 
 			$board->save();
 			echo 0;

@@ -22,6 +22,7 @@ $f3->route('POST /board/delete', 'Action\Board\Post->delete');
 
 $f3->route('GET /comment/getList/@boardIdx/@more', 'Action\Board\Comment->getList');
 $f3->route('GET /comment/getMore/@boardIdx/@more', 'Action\Board\Comment->getMore');
+$f3->route('GET /comment/view/@idx', 'Action\Board\Comment->view');
 $f3->route('POST /comment/add', 'Action\Board\Comment->add');
 $f3->route('POST /comment/modify', 'Action\Board\Comment->modify');
 $f3->route('POST /comment/delete', 'Action\Board\Comment->delete');

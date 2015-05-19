@@ -11,6 +11,7 @@ use DB;
 
 define("POSTLIMIT", 10);
 define("PAGELIMIT", 4);
+define("COMMENTLIMIT", 5);
 
 class Base {
     protected $db;

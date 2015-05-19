@@ -32,8 +32,32 @@ app.config(['$routeProvider', function($routeProvider) {
 			controller: 'PostModCtrl',
 			templateUrl: 'app/board/template/input.html'
 		}).
+		when('/mod/:page/post/:idx/search/:searchText', {
+			controller: 'PostModCtrl',
+			templateUrl: 'app/board/template/input.html'
+		}).
 		when('/del/:page/post/:idx', {
 			controller: 'PostDelCtrl',
+			templateUrl: 'app/board/template/passwd.html'
+		}).
+		when('/del/:page/post/:idx/search/:searchText', {
+			controller: 'PostDelCtrl',
+			templateUrl: 'app/board/template/passwd.html'
+		}).
+		when('/modComment/:page/post/:boardIdx/comment/:idx', {
+			controller: 'CommentModCtrl',
+			templateUrl: 'app/board/template/comment.html'
+		}).
+		when('/modComment/:page/post/:boardIdx/comment/:idx/search/:searchText', {
+			controller: 'CommentModCtrl',
+			templateUrl: 'app/board/template/comment.html'
+		}).
+		when('/delComment/:page/post/:boardIdx/comment/:idx', {
+			controller: 'CommentDelCtrl',
+			templateUrl: 'app/board/template/passwd.html'
+		}).
+		when('/delComment/:page/post/:boardIdx/comment/:idx/search/:searchText', {
+			controller: 'CommentDelCtrl',
 			templateUrl: 'app/board/template/passwd.html'
 		}).
 		otherwise({
